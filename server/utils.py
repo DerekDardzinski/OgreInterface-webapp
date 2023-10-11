@@ -12,7 +12,45 @@ import numpy as np
 import pyvista as pv
 
 from OgreInterface.plotting_tools.colors import vesta_colors
+from OgreInterface.miller import MillerSearch
 from OgreInterface import utils as ogre_utils
+
+
+def get_formatted_formula(formula: str) -> str:
+    groups = itertools.groupby(formula, key=lambda x: x.isdigit())
+
+    formatted_formula = []
+    for k, group in groups:
+        if k:
+            data = ["sub", {}, "".join(list(group))]
+        else:
+            data = ["span", {}, "".join(list(group))]
+
+        formatted_formula.append(data)
+
+    return formatted_formula
+
+
+def get_formatted_spacegroup(spacegroup: str) -> str:
+    formatted_spacegroup = []
+
+    i = 0
+    while i < len(spacegroup):
+        s = spacegroup[i]
+        if s == "_":
+            data = ["sub", {}, spacegroup[i + 1]]
+            formatted_spacegroup.append(data)
+            i += 2
+        if s == "-":
+            data = ["span", {"className": "overline"}, spacegroup[i + 1]]
+            formatted_spacegroup.append(data)
+            i += 2
+        else:
+            data = ["span", {}, spacegroup[i]]
+            formatted_spacegroup.append(data)
+            i += 1
+
+    return formatted_spacegroup
 
 
 def get_bond_info(
@@ -337,6 +375,21 @@ def get_threejs_data(data_dict):
         "viewData": view_info,
         "centerShift": _three_flip((-1 * center_shift).tolist()),
     }
+
+
+def run_miller_scan(
+    film_bulk,
+    substrate_bulk,
+    max_film_miller_index: int,
+    max_substrate_miller_index: int,
+    max_area: float,
+    max_strain: float,
+) -> Dict:
+    film_structure = Structure.from_dict(film_bulk)
+    substrate_structure = Structure.from_dict(substrate_bulk)
+
+    print(film_structure)
+    print(substrate_structure)
 
 
 if __name__ == "__main__":

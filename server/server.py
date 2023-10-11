@@ -36,22 +36,39 @@ def substrate_file_upload():
 
     film_struc = Structure.from_str(film_file_contents, fmt="cif")
     film_formula = film_struc.composition.reduced_formula
+    film_formula_comp = utils.get_formatted_formula(film_formula)
     film_sg = SpacegroupAnalyzer(structure=film_struc)
     film_sg_symbol = film_sg.get_space_group_symbol()
+    film_sg_comp = utils.get_formatted_spacegroup(film_sg_symbol)
+    film_label = (
+        [["span", {}, "Film: "]]
+        + film_formula_comp
+        + [["span", {}, " ("]]
+        + film_sg_comp
+        + [["span", {}, ")"]]
+    )
 
     substrate_struc = Structure.from_str(substrate_file_contents, fmt="cif")
     substrate_formula = substrate_struc.composition.reduced_formula
+    substrate_formula_comp = utils.get_formatted_formula(substrate_formula)
     substrate_sg = SpacegroupAnalyzer(structure=substrate_struc)
     substrate_sg_symbol = substrate_sg.get_space_group_symbol()
+    substrate_sg_comp = utils.get_formatted_spacegroup(substrate_sg_symbol)
+    substrate_label = (
+        [["span", {}, "Substrate: "]]
+        + substrate_formula_comp
+        + [["span", {}, " ("]]
+        + substrate_sg_comp
+        + [["span", {}, ")"]]
+    )
 
     return jsonify(
         {
             "film": film_struc.to_json(),
             "filmSpaceGroup": film_sg_symbol,
-            "filmFormula": film_formula,
+            "filmLabel": film_label,
             "substrate": substrate_struc.to_json(),
-            "substrateSpaceGroup": substrate_sg_symbol,
-            "substrateFormula": substrate_formula,
+            "substrateLabel": substrate_label,
         }
     )
 
@@ -67,6 +84,34 @@ def convert_structure_to_three():
         plotting_data = utils.get_threejs_data(data_dict=data_dict)
 
         return jsonify(plotting_data)
+
+
+@app.route("/api/miller_scan", methods=["POST"])
+def miller_scan():
+    data = request.form
+    max_film_miller = data["maxFilmMiller"]
+    max_substrate_miller = data["maxSubstrateMiller"]
+    _max_area = data["maxArea"]
+
+    if _max_area == "":
+        max_area = None
+    else:
+        max_area = float(max_area.strip())
+
+    max_strain = data["maxStrain"]
+    substrate_structure_dict = json.loads(data["substrateStructure"])
+    film_structure_dict = json.loads(data["filmStructure"])
+
+    utils.run_miller_scan(
+        film_bulk=film_structure_dict,
+        substrate_bulk=substrate_structure_dict,
+        max_film_miller_index=int(max_film_miller.strip()),
+        max_substrate_miller_index=int(max_substrate_miller.strip()),
+        max_area=max_area,
+        max_strain=float(max_strain.strip()),
+    )
+
+    return jsonify({"test": "test"})
 
 
 if __name__ == "__main__":
