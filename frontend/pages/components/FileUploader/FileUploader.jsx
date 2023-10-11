@@ -4,7 +4,6 @@ import AppContext from "../AppContext/AppContext";
 import BaseCard from "../BaseCard/BaseCard";
 
 function FileUploader(props) {
-	const api = props.api;
 	const { film, substrate } = useContext(AppContext);
 	const [filmData, setFilmData] = film;
 	const [substrateData, setSubstrateData] = substrate;
@@ -21,7 +20,7 @@ function FileUploader(props) {
 		fd.append("filmFile", file["film"]);
 		fd.append("substrateFile", file["substrate"]);
 
-		fetch(api, {
+		fetch("/api/structure_upload", {
 			method: "POST",
 			body: fd,
 		})

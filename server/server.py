@@ -6,18 +6,13 @@ import json
 import utils
 
 # app instance
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path="",
+    static_folder="../frontend/build",
+    template_folder="../fontend/build",
+)
 CORS(app)
-
-
-@app.route("/api/home", methods=["GET"])
-def return_home():
-    return jsonify(
-        {
-            "message": "Hello World!!!!!!",
-            "people": ["Jack", "Harry", "Barry"],
-        }
-    )
 
 
 @app.route("/api/structure_upload", methods=["POST"])
@@ -74,6 +69,7 @@ def substrate_file_upload():
 
 
 @app.route("/api/structure_to_three", methods=["POST"])
+@cross_origin()
 def convert_structure_to_three():
     json_data = request.data.decode()
     data_dict = json.loads(json_data)
@@ -87,6 +83,7 @@ def convert_structure_to_three():
 
 
 @app.route("/api/miller_scan", methods=["POST"])
+@cross_origin()
 def miller_scan():
     data = request.form
     max_film_miller = data["maxFilmMiller"]

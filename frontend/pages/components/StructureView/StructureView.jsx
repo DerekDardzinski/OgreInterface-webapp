@@ -42,7 +42,6 @@ function CameraRig(props) {
 }
 
 function StructureView(props) {
-	const api = props.api;
 	const structureData = props.structureData;
 	const [atoms, setAtoms] = useState([]);
 	const [bonds, setBonds] = useState([]);
@@ -86,7 +85,7 @@ function StructureView(props) {
 	// const [animate, setAnimate] = useState(false);
 
 	useEffect(() => {
-		fetch(api, {
+		fetch("/api/structure_to_three", {
 			method: "POST",
 			body: structureData.structure,
 		})
@@ -117,7 +116,7 @@ function StructureView(props) {
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [api, structureData]);
+	}, [structureData]);
 
 	let toshow;
 	if (atoms.length > 0) {

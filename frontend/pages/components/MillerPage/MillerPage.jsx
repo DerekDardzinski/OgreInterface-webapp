@@ -21,7 +21,7 @@ function MillerPage() {
     fd.append("substrateStructure", substrateData.structure)
 
 		// You can pass formData as a fetch body directly:
-    fetch("http://localhost:8080/api/miller_scan", {
+    fetch("/api/miller_scan", {
 			method: "POST",
 			body: fd,
 		})

@@ -27,29 +27,13 @@ function Index() {
 							</BaseCard>
 						</div>
 						<div className='md:col-span-2'>
-							<FileUploader
-								api={
-									"http://localhost:8080/api/structure_upload"
-								}
-							/>
+							<FileUploader />
 						</div>
 
 						{substrateData != "" && filmData != "" && (
 							<>
-								<StructureView
-									api={
-										"http://localhost:8080/api/structure_to_three"
-									}
-									structureData={filmData}
-									label={"Film"}
-								/>
-								<StructureView
-									api={
-										"http://localhost:8080/api/structure_to_three"
-									}
-									structureData={substrateData}
-									label={"Substrate"}
-								/>
+								<StructureView structureData={filmData} />
+								<StructureView structureData={substrateData} />
 								<SelectionPage />
 							</>
 						)}
