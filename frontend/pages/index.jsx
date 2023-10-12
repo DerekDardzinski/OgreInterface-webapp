@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import AppContext from "./components/AppContext/AppContext";
-import FileUploader from "./components/FileUploader/FileUploader";
-import StructureView from "./components/StructureView/StructureView";
-import BaseCard from "./components/BaseCard/BaseCard";
-import SelectionPage from "./components/SelectionPage/SelectionPage";
+import AppContext from "../components/AppContext/AppContext";
+import FileUploader from "../components/FileUploader/FileUploader";
+import StructureView from "../components/StructureView/StructureView";
+import BaseCard from "../components/BaseCard/BaseCard";
+import SelectionPage from "../components/SelectionPage/SelectionPage";
 
 function Index() {
 	const [substrateData, setSubstrateData] = useState("");

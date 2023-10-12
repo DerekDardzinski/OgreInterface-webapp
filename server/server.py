@@ -8,9 +8,9 @@ import utils
 # app instance
 app = Flask(
     __name__,
-    static_url_path="",
-    static_folder="../frontend/build",
-    template_folder="../fontend/build",
+    # static_url_path="",
+    # static_folder="../frontend/.next",
+    # template_folder="../fontend/.next",
 )
 CORS(app)
 
@@ -112,4 +112,4 @@ def miller_scan():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=False, port=8080)
